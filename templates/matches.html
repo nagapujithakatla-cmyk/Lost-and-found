@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="matches-page">
+
+    <div class="matches-container">
+
+        <div class="matches-heading">
+
+            <div class="dashboard-kicker">
+                AI MATCHING RESULTS
+            </div>
+
+            <h1>
+                Possible Matches
+            </h1>
+
+            <p>
+                Results for:
+                <strong>
+                    {{ item.item_name }}
+                </strong>
+            </p>
+
+        </div>
+
+
+        {% if results %}
+
+            <div class="results-grid">
+
+                {% for result in results %}
+
+                    <div class="result-card">
+
+                        <div class="result-top">
+
+                            <span>
+                                {{ result.item.item_type|upper }}
+                            </span>
+
+                            <strong>
+                                {{ result.score }}%
+                            </strong>
+
+                        </div>
+
+
+                        <h2>
+                            {{ result.item.item_name }}
+                        </h2>
+
+
+                        <p>
+                            {{ result.item.description or "No description" }}
+                        </p>
+
+
+                        <div class="result-details">
+
+                            <div>
+                                <b>Category</b>
+                                <span>
+                                    {{ result.item.category or "N/A" }}
+                                </span>
+                            </div>
+
+                            <div>
+                                <b>Brand</b>
+                                <span>
+                                    {{ result.item.brand or "N/A" }}
+                                </span>
+                            </div>
+
+                            <div>
+                                <b>Color</b>
+                                <span>
+                                    {{ result.item.color or "N/A" }}
+                                </span>
+                            </div>
+
+                            <div>
+                                <b>Location</b>
+                                <span>
+                                    {{ result.item.location or "N/A" }}
+                                </span>
+                            </div>
+
+                        </div>
+
+
+                        <div class="score-bar">
+
+                            <div
+                                class="score-fill"
+                                style="width: {{ result.score }}%;"
+                            ></div>
+
+                        </div>
+
+
+                        <div class="score-breakdown">
+
+                            <span>
+                                Description:
+                                {{ result.details.description }}%
+                            </span>
+
+                            <span>
+                                Category:
+                                {{ result.details.category }}%
+                            </span>
+
+                            <span>
+                                Brand:
+                                {{ result.details.brand }}%
+                            </span>
+
+                            <span>
+                                Color:
+                                {{ result.details.color }}%
+                            </span>
+
+                            <span>
+                                Location:
+                                {{ result.details.location }}%
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="empty-box">
+
+                <div>🔍</div>
+
+                <h3>
+                    No possible matches found
+                </h3>
+
+                <p>
+                    Try adding more detailed information to your report.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="primary-button back-dashboard"
+        >
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

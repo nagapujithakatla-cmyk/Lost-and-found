@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="report-page">
+
+    <div class="report-container">
+
+        <div class="report-heading">
+
+            <div class="report-kicker">
+                SMART ITEM REPORT
+            </div>
+
+            <h1>
+
+                {% if item_type == "lost" %}
+                    Report Lost Item
+                {% else %}
+                    Report Found Item
+                {% endif %}
+
+            </h1>
+
+            <p>
+                Enter accurate details so the smart matching
+                system can find better matches.
+            </p>
+
+        </div>
+
+
+        <form
+            method="post"
+            enctype="multipart/form-data"
+            class="report-card"
+        >
+
+            <div class="form-grid">
+
+
+                <div class="form-field">
+
+                    <label>
+                        Item Name *
+                    </label>
+
+                    <input
+                        type="text"
+                        name="item_name"
+                        placeholder="Example: Black Wallet"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-field">
+
+                    <label>
+                        Category
+                    </label>
+
+                    <select name="category">
+
+                        <option value="">
+                            Select category
+                        </option>
+
+                        <option>
+                            Electronics
+                        </option>
+
+                        <option>
+                            Wallet
+                        </option>
+
+                        <option>
+                            Bag
+                        </option>
+
+                        <option>
+                            Keys
+                        </option>
+
+                        <option>
+                            Documents
+                        </option>
+
+                        <option>
+                            Accessories
+                        </option>
+
+                        <option>
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-field">
+
+                    <label>
+                        Brand
+                    </label>
+
+                    <input
+                        type="text"
+                        name="brand"
+                        placeholder="Example: Samsung"
+                    >
+
+                </div>
+
+
+                <div class="form-field">
+
+                    <label>
+                        Color
+                    </label>
+
+                    <input
+                        type="text"
+                        name="color"
+                        placeholder="Example: Black"
+                    >
+
+                </div>
+
+
+                <div class="form-field">
+
+                    <label>
+                        Location
+                    </label>
+
+                    <input
+                        type="text"
+                        name="location"
+                        placeholder="Example: Library"
+                    >
+
+                </div>
+
+
+                <div class="form-field">
+
+                    <label>
+                        Date
+                    </label>
+
+                    <input
+                        type="date"
+                        name="item_date"
+                    >
+
+                </div>
+
+
+                <div class="form-field full-field">
+
+                    <label>
+                        Description
+                    </label>
+
+                    <textarea
+                        name="description"
+                        rows="5"
+                        placeholder="Describe the item in detail..."
+                    ></textarea>
+
+                </div>
+
+
+                <div class="form-field full-field">
+
+                    <label>
+                        Item Image
+                    </label>
+
+                    <input
+                        type="file"
+                        name="image"
+                        accept=".png,.jpg,.jpeg,.webp"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="report-actions">
+
+                <a
+                    href="{{ url_for('complaint') }}"
+                    class="secondary-button"
+                >
+                    Back
+                </a>
+
+                <button
+                    type="submit"
+                    class="primary-button"
+                >
+                    Submit Report →
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

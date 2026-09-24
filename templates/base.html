@@ -1,0 +1,557 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>
+        Lost &amp; Found Smart Matching System
+    </title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+    <!-- Notification styling -->
+    <style>
+
+        /* =====================================================
+           TOP NOTIFICATION
+        ===================================================== */
+
+        .flash-container {
+            position: fixed;
+            top: 22px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(92%, 680px);
+            z-index: 99999;
+            pointer-events: none;
+        }
+
+        .flash-message {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+
+            min-height: 62px;
+            padding: 14px 18px;
+
+            border-radius: 18px;
+
+            font-family: "Times New Roman", serif;
+            font-size: 17px;
+            font-weight: 600;
+
+            color: #222;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255, 255, 255, 0.97),
+                    rgba(245, 247, 255, 0.96)
+                );
+
+            border: 1px solid rgba(255, 255, 255, 0.8);
+
+            box-shadow:
+                0 12px 35px rgba(70, 42, 150, 0.20),
+                0 4px 15px rgba(0, 0, 0, 0.10);
+
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+
+            overflow: hidden;
+
+            animation:
+                notificationSlideIn 0.55s
+                cubic-bezier(0.22, 1, 0.36, 1);
+
+            transition:
+                opacity 0.4s ease,
+                transform 0.4s ease;
+        }
+
+        .flash-message::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+
+            border-radius: 18px 0 0 18px;
+        }
+
+        /* SUCCESS */
+
+        .flash-success {
+            border-color: rgba(34, 197, 94, 0.25);
+        }
+
+        .flash-success::before {
+            background:
+                linear-gradient(
+                    180deg,
+                    #22c55e,
+                    #16a34a
+                );
+        }
+
+        .flash-success .flash-icon {
+            background:
+                linear-gradient(
+                    135deg,
+                    #22c55e,
+                    #16a34a
+                );
+        }
+
+        /* DANGER */
+
+        .flash-danger {
+            border-color: rgba(239, 68, 68, 0.25);
+        }
+
+        .flash-danger::before {
+            background:
+                linear-gradient(
+                    180deg,
+                    #ef4444,
+                    #dc2626
+                );
+        }
+
+        .flash-danger .flash-icon {
+            background:
+                linear-gradient(
+                    135deg,
+                    #ef4444,
+                    #dc2626
+                );
+        }
+
+        /* WARNING */
+
+        .flash-warning {
+            border-color: rgba(245, 158, 11, 0.25);
+        }
+
+        .flash-warning::before {
+            background:
+                linear-gradient(
+                    180deg,
+                    #f59e0b,
+                    #d97706
+                );
+        }
+
+        .flash-warning .flash-icon {
+            background:
+                linear-gradient(
+                    135deg,
+                    #f59e0b,
+                    #d97706
+                );
+        }
+
+        /* INFO */
+
+        .flash-info {
+            border-color: rgba(59, 130, 246, 0.25);
+        }
+
+        .flash-info::before {
+            background:
+                linear-gradient(
+                    180deg,
+                    #3b82f6,
+                    #2563eb
+                );
+        }
+
+        .flash-info .flash-icon {
+            background:
+                linear-gradient(
+                    135deg,
+                    #3b82f6,
+                    #2563eb
+                );
+        }
+
+        .flash-icon {
+            flex-shrink: 0;
+
+            width: 36px;
+            height: 36px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            color: white;
+
+            font-family: Arial, sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+
+            box-shadow:
+                0 5px 14px rgba(0, 0, 0, 0.18);
+        }
+
+        .flash-text {
+            flex: 1;
+
+            line-height: 1.35;
+            padding-right: 5px;
+        }
+
+        .flash-close {
+            flex-shrink: 0;
+
+            width: 32px;
+            height: 32px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border: none;
+            border-radius: 50%;
+
+            background: rgba(0, 0, 0, 0.06);
+
+            color: #555;
+
+            font-family: Arial, sans-serif;
+            font-size: 23px;
+            line-height: 1;
+
+            cursor: pointer;
+
+            transition:
+                background 0.2s ease,
+                color 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .flash-close:hover {
+            background: rgba(0, 0, 0, 0.12);
+            color: #111;
+            transform: scale(1.08);
+        }
+
+        /* ENTER ANIMATION */
+
+        @keyframes notificationSlideIn {
+
+            0% {
+                opacity: 0;
+                transform:
+                    translateY(-35px)
+                    scale(0.96);
+            }
+
+            60% {
+                opacity: 1;
+                transform:
+                    translateY(6px)
+                    scale(1.01);
+            }
+
+            100% {
+                opacity: 1;
+                transform:
+                    translateY(0)
+                    scale(1);
+            }
+
+        }
+
+        /* EXIT ANIMATION */
+
+        .flash-hide {
+            opacity: 0 !important;
+
+            transform:
+                translateY(-25px)
+                scale(0.95) !important;
+
+            pointer-events: none;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 576px) {
+
+            .flash-container {
+                top: 12px;
+                width: 94%;
+            }
+
+            .flash-message {
+                min-height: 56px;
+                padding: 12px 14px;
+                gap: 10px;
+                font-size: 15px;
+                border-radius: 15px;
+            }
+
+            .flash-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 17px;
+            }
+
+            .flash-close {
+                width: 29px;
+                height: 29px;
+                font-size: 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     NAVIGATION BAR
+========================================================= -->
+
+<nav class="navbar">
+
+    <div class="container-fluid">
+
+        <div class="nav-buttons">
+
+            {% if current_user %}
+
+                <a
+                    href="{{ url_for('dashboard') }}"
+                    class="nav-button"
+                >
+                    Dashboard
+                </a>
+
+
+                <a
+                    href="{{ url_for('report', item_type='lost') }}"
+                    class="nav-button"
+                >
+                    Report Lost
+                </a>
+
+
+                <a
+                    href="{{ url_for('report', item_type='found') }}"
+                    class="nav-button"
+                >
+                    Report Found
+                </a>
+
+
+                {% if current_user.role == 'admin' %}
+
+                    <a
+                        href="{{ url_for('admin') }}"
+                        class="nav-button admin-button"
+                    >
+                        Admin
+                    </a>
+
+                {% endif %}
+
+
+                <a
+                    href="{{ url_for('logout') }}"
+                    class="nav-button logout-button"
+                >
+                    Logout
+                </a>
+
+
+            {% else %}
+
+
+                <a
+                    href="{{ url_for('login') }}"
+                    class="nav-button"
+                >
+                    Login
+                </a>
+
+
+                <a
+                    href="{{ url_for('register') }}"
+                    class="nav-button register-button"
+                >
+                    Register
+                </a>
+
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =========================================================
+     TOP WEBSITE NOTIFICATIONS
+========================================================= -->
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+    {% if messages %}
+
+        <div
+            class="flash-container"
+            aria-live="polite"
+            aria-atomic="true"
+        >
+
+            {% for category, message in messages %}
+
+                <div
+                    class="flash-message flash-{{ category }}"
+                    role="alert"
+                >
+
+                    <div class="flash-icon">
+
+                        {% if category == "success" %}
+                            ✓
+
+                        {% elif category == "danger" %}
+                            !
+
+                        {% elif category == "warning" %}
+                            !
+
+                        {% else %}
+                            i
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="flash-text">
+                        {{ message }}
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="flash-close"
+                        onclick="closeFlash(this)"
+                        aria-label="Close notification"
+                    >
+                        ×
+                    </button>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+{% endwith %}
+
+
+
+<!-- =========================================================
+     PAGE CONTENT
+========================================================= -->
+
+<div class="page-container">
+
+    {% block content %}
+
+    {% endblock %}
+
+</div>
+
+
+
+<!-- =========================================================
+     NOTIFICATION JAVASCRIPT
+========================================================= -->
+
+<script>
+
+function closeFlash(button) {
+
+    const message =
+        button.closest(".flash-message");
+
+    if (!message) {
+        return;
+    }
+
+    message.classList.add("flash-hide");
+
+    setTimeout(
+        () => message.remove(),
+        450
+    );
+
+}
+
+
+
+/*
+    Automatically hide every notification
+    after 4 seconds.
+*/
+
+setTimeout(() => {
+
+    document
+        .querySelectorAll(".flash-message")
+        .forEach(message => {
+
+            message.classList.add(
+                "flash-hide"
+            );
+
+            setTimeout(
+                () => message.remove(),
+                450
+            );
+
+        });
+
+}, 4000);
+
+</script>
+
+
+</body>
+
+</html>

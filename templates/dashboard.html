@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="dashboard-page">
+
+    <div class="dashboard-container">
+
+        <div class="dashboard-heading">
+
+            <div class="dashboard-kicker">
+                USER DASHBOARD
+            </div>
+
+            <h1>
+                Welcome,
+                <span>{{ current_user.name }}</span>
+            </h1>
+
+            <p>
+                Manage your reports and view smart matches.
+            </p>
+
+        </div>
+
+
+        <div class="dashboard-stats">
+
+            <div class="stat-card">
+                <span>📋</span>
+                <strong>{{ items|length }}</strong>
+                <small>Your Reports</small>
+            </div>
+
+            <div class="stat-card">
+                <span>🤖</span>
+                <strong>{{ matches|length }}</strong>
+                <small>Smart Matches</small>
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-section">
+
+            <div class="section-title">
+                <h2>Your Reports</h2>
+
+                <a
+                    href="{{ url_for('complaint') }}"
+                    class="small-action"
+                >
+                    + New Report
+                </a>
+            </div>
+
+
+            {% if items %}
+
+                <div class="item-grid">
+
+                    {% for item in items %}
+
+                        <div class="item-card">
+
+                            {% if item.image %}
+
+                                <img
+                                    src="{{ url_for('uploaded_file', filename=item.image) }}"
+                                    class="item-image"
+                                >
+
+                            {% else %}
+
+                                <div class="item-image-placeholder">
+                                    📦
+                                </div>
+
+                            {% endif %}
+
+
+                            <div class="item-card-content">
+
+                                <span class="item-type
+                                    {% if item.item_type == 'lost' %}
+                                        lost-label
+                                    {% else %}
+                                        found-label
+                                    {% endif %}
+                                ">
+                                    {{ item.item_type|upper }}
+                                </span>
+
+                                <h3>
+                                    {{ item.item_name }}
+                                </h3>
+
+                                <p>
+                                    {{ item.description or "No description" }}
+                                </p>
+
+                                <small>
+                                    📍 {{ item.location or "Location not given" }}
+                                </small>
+
+                                <a
+                                    href="{{ url_for('find_matches', item_id=item.id) }}"
+                                    class="match-button"
+                                >
+                                    Find Matches →
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-box">
+                    <div>📦</div>
+                    <h3>No reports yet</h3>
+                    <p>
+                        Report a lost or found item to start.
+                    </p>
+
+                    <a
+                        href="{{ url_for('complaint') }}"
+                        class="primary-button"
+                    >
+                        Create Report
+                    </a>
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="dashboard-section">
+
+            <div class="section-title">
+                <h2>Smart Matches</h2>
+            </div>
+
+
+            {% if matches %}
+
+                <div class="matches-list">
+
+                    {% for match in matches %}
+
+                        <div class="dashboard-match">
+
+                            <div>
+
+                                <span class="match-score">
+                                    {{ match.score }}%
+                                </span>
+
+                                <h3>
+                                    {{ match.lost_name }}
+                                    ↔
+                                    {{ match.found_name }}
+                                </h3>
+
+                                <p>
+                                    {{ match.lost_location or "Unknown" }}
+                                    ↔
+                                    {{ match.found_location or "Unknown" }}
+                                </p>
+
+                            </div>
+
+                            <span class="match-status">
+                                {{ match.status }}
+                            </span>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-box small-empty">
+
+                    <div>🤖</div>
+
+                    <h3>
+                        No matches available
+                    </h3>
+
+                    <p>
+                        Use Find Matches on one of your reports.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

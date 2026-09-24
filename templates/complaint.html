@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="choice-page">
+
+    <div class="choice-glow"></div>
+
+    <div class="choice-container">
+
+        <div class="choice-kicker">
+            SMART REPORTING
+        </div>
+
+        <h1>
+            What would you like
+            <span>to report?</span>
+        </h1>
+
+        <p class="choice-description">
+            Choose an option below to report your item.
+            Our smart matching system will help find possible matches.
+        </p>
+
+
+        <div class="choice-cards">
+
+
+            <a
+                href="{{ url_for('report', item_type='lost') }}"
+                class="choice-card lost-choice"
+            >
+
+                <div class="choice-icon">
+                    🔴
+                </div>
+
+                <div>
+
+                    <h2>
+                        I Lost an Item
+                    </h2>
+
+                    <p>
+                        Report something you lost and
+                        let the system search for possible matches.
+                    </p>
+
+                </div>
+
+                <span class="choice-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <a
+                href="{{ url_for('report', item_type='found') }}"
+                class="choice-card found-choice"
+            >
+
+                <div class="choice-icon">
+                    🟢
+                </div>
+
+                <div>
+
+                    <h2>
+                        I Found an Item
+                    </h2>
+
+                    <p>
+                        Report an item you found so the owner
+                        can be identified through smart matching.
+                    </p>
+
+                </div>
+
+                <span class="choice-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

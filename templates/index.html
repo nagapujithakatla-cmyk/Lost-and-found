@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="home-page">
+
+    <div class="home-content">
+
+        <div class="home-kicker">
+            SMART CAMPUS SOLUTION
+        </div>
+
+        <h1 class="home-title">
+            Lost &amp; Found
+            <span>Smart Matching System</span>
+        </h1>
+
+        <a
+            href="{{ url_for('register') }}"
+            class="get-started-button"
+        >
+            Get Started
+        </a>
+
+        <p class="home-description">
+            A smart platform that helps users report lost and
+            found items and automatically discovers possible
+            matches using intelligent text similarity.
+        </p>
+
+    </div>
+
+
+    <div class="home-image-area">
+
+        <img
+            src="{{ url_for('static', filename='project-image.png') }}"
+            class="project-image"
+            alt="Lost and Found Smart Matching System"
+        >
+
+    </div>
+
+</div>
+
+{% endblock %}

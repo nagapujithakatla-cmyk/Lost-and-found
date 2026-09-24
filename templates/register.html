@@ -1,0 +1,470 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="auth-page auth-register-page">
+
+    <div class="register-orb register-orb-one"></div>
+    <div class="register-orb register-orb-two"></div>
+    <div class="register-orb register-orb-three"></div>
+
+
+    <div class="register-scene">
+
+
+        <!-- =====================================================
+             LEFT SIDE
+        ===================================================== -->
+
+        <div class="register-visual">
+
+            <div class="register-kicker">
+                LOST &amp; FOUND
+            </div>
+
+            <h1>
+                Register
+            </h1>
+
+            <p>
+                Create your account and start reporting lost or found items.
+            </p>
+
+
+            <div class="bag-animation">
+
+                <div class="bag-handle"></div>
+
+                <div class="bag-body">
+
+                    <div class="bag-lock"></div>
+
+                    <div class="bag-label">
+                        FOUND
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="floating-chip chip-one">
+                🔑
+            </div>
+
+            <div class="floating-chip chip-two">
+                📱
+            </div>
+
+            <div class="floating-chip chip-three">
+                🎒
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             REGISTRATION FORM
+        ===================================================== -->
+
+        <div class="register-card">
+
+            <div class="register-card-top">
+
+                <span class="mini-dot"></span>
+
+                <span>
+                    NEW ACCOUNT
+                </span>
+
+            </div>
+
+
+            <h2>
+                Register
+            </h2>
+
+            <p class="register-subtitle">
+                Enter your details to create your account.
+            </p>
+
+
+            <form
+                method="post"
+                class="auth-form"
+                id="registerForm"
+                onsubmit="handleRegisterSubmit(event)"
+            >
+
+
+                <!-- NAME -->
+
+                <div class="auth-field">
+
+                    <label for="name">
+                        Full Name
+                    </label>
+
+                    <div class="auth-input-wrap">
+
+                        <span class="auth-input-icon">
+                            ●
+                        </span>
+
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="Enter your full name"
+                            autocomplete="name"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- EMAIL -->
+
+                <div class="auth-field">
+
+                    <label for="email">
+                        Email
+                    </label>
+
+                    <div class="auth-input-wrap">
+
+                        <span class="auth-input-icon">
+                            ✉
+                        </span>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Enter your email"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- PASSWORD -->
+
+                <div class="auth-field">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="auth-input-wrap">
+
+                        <span class="auth-input-icon">
+                            ⌑
+                        </span>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Create a password"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="toggleRegisterPassword()"
+                            aria-label="Show or hide password"
+                        >
+                            ◉
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- REGISTER BUTTON -->
+
+                <button
+                    type="submit"
+                    class="auth-submit register-submit"
+                    id="registerButton"
+                >
+
+                    <span id="registerButtonText">
+                        Register
+                    </span>
+
+                </button>
+
+            </form>
+
+
+
+            <!-- LOGIN LINK -->
+
+            <div class="auth-bottom">
+
+                <span>
+                    Already have an account?
+                </span>
+
+                <a href="{{ url_for('login') }}">
+                    Login
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+/* =========================================================
+   SHOW / HIDE REGISTER PASSWORD
+========================================================= */
+
+function toggleRegisterPassword() {
+
+    const input =
+        document.getElementById("password");
+
+    const button =
+        document.querySelector(".password-toggle");
+
+    if (!input || !button) {
+        return;
+    }
+
+
+    if (input.type === "password") {
+
+        input.type = "text";
+
+        button.textContent = "🙈";
+
+        button.setAttribute(
+            "aria-label",
+            "Hide password"
+        );
+
+    } else {
+
+        input.type = "password";
+
+        button.textContent = "◉";
+
+        button.setAttribute(
+            "aria-label",
+            "Show password"
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   REGISTER SUBMIT LOADING EFFECT
+========================================================= */
+
+function handleRegisterSubmit(event) {
+
+    const form =
+        document.getElementById("registerForm");
+
+    const button =
+        document.getElementById("registerButton");
+
+    const buttonText =
+        document.getElementById("registerButtonText");
+
+
+    if (
+        !form ||
+        !button ||
+        !buttonText
+    ) {
+        return;
+    }
+
+
+    /*
+        Prevent accidental double submission.
+    */
+
+    if (
+        button.dataset.submitting === "true"
+    ) {
+
+        event.preventDefault();
+
+        return;
+
+    }
+
+
+    /*
+        Mark button as submitting.
+    */
+
+    button.dataset.submitting = "true";
+
+    button.disabled = true;
+
+
+    /*
+        Change button text.
+    */
+
+    buttonText.textContent =
+        "Creating Account...";
+
+
+    /*
+        Add loading animation.
+    */
+
+    button.classList.add(
+        "register-loading"
+    );
+
+}
+
+</script>
+
+
+<style>
+
+/* =========================================================
+   REGISTER LOADING
+========================================================= */
+
+.register-submit.register-loading {
+
+    position: relative;
+
+    cursor: wait;
+
+    opacity: 0.92;
+
+}
+
+
+.register-submit.register-loading::after {
+
+    content: "";
+
+    width: 8px;
+
+    height: 8px;
+
+    margin-left: 10px;
+
+    border-radius: 50%;
+
+    display: inline-block;
+
+    background: white;
+
+    animation:
+        registerDotPulse
+        0.8s
+        infinite
+        ease-in-out;
+
+}
+
+
+@keyframes registerDotPulse {
+
+    0% {
+
+        opacity: 0.35;
+
+        transform:
+            scale(0.7);
+
+    }
+
+    50% {
+
+        opacity: 1;
+
+        transform:
+            scale(1.2);
+
+    }
+
+    100% {
+
+        opacity: 0.35;
+
+        transform:
+            scale(0.7);
+
+    }
+
+}
+
+
+/* =========================================================
+   INPUT FOCUS
+========================================================= */
+
+.auth-input-wrap input:focus {
+
+    outline: none;
+
+}
+
+
+.auth-input-wrap:focus-within {
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+/* =========================================================
+   PASSWORD BUTTON
+========================================================= */
+
+.password-toggle {
+
+    cursor: pointer;
+
+    border: none;
+
+    background: transparent;
+
+}
+
+
+.password-toggle:focus {
+
+    outline: none;
+
+}
+
+</style>
+
+{% endblock %}

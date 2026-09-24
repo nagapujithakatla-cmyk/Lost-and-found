@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="admin-page">
+
+    <div class="admin-container">
+
+        <div class="dashboard-heading">
+
+            <div class="dashboard-kicker">
+                ADMIN CONTROL CENTER
+            </div>
+
+            <h1>
+                System
+                <span>Administration</span>
+            </h1>
+
+            <p>
+                Manage users, reports and smart matching results.
+            </p>
+
+        </div>
+
+
+        <div class="admin-stats">
+
+            <div class="stat-card">
+                <span>👥</span>
+                <strong>{{ users|length }}</strong>
+                <small>Users</small>
+            </div>
+
+            <div class="stat-card">
+                <span>📦</span>
+                <strong>{{ items|length }}</strong>
+                <small>Items</small>
+            </div>
+
+            <div class="stat-card">
+                <span>🤖</span>
+                <strong>{{ matches|length }}</strong>
+                <small>Matches</small>
+            </div>
+
+        </div>
+
+
+        <div class="admin-section">
+
+            <h2>
+                Users
+            </h2>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Created</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for user in users %}
+
+                            <tr>
+
+                                <td>
+                                    {{ user.id }}
+                                </td>
+
+                                <td>
+                                    {{ user.name }}
+                                </td>
+
+                                <td>
+                                    {{ user.email }}
+                                </td>
+
+                                <td>
+                                    {{ user.role }}
+                                </td>
+
+                                <td>
+                                    {{ user.created_at }}
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-section">
+
+            <h2>
+                Items
+            </h2>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Item</th>
+                            <th>Type</th>
+                            <th>Owner</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for item in items %}
+
+                            <tr>
+
+                                <td>
+                                    {{ item.item_name }}
+                                </td>
+
+                                <td>
+                                    {{ item.item_type }}
+                                </td>
+
+                                <td>
+                                    {{ item.owner_name }}
+                                </td>
+
+                                <td>
+                                    {{ item.location or "N/A" }}
+                                </td>
+
+                                <td>
+                                    {{ item.status }}
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-section">
+
+            <h2>
+                Match Verification
+            </h2>
+
+            <div class="admin-match-list">
+
+                {% for match in matches %}
+
+                    <div class="admin-match">
+
+                        <div>
+
+                            <strong>
+                                {{ match.lost_name }}
+                                ↔
+                                {{ match.found_name }}
+                            </strong>
+
+                            <span>
+                                {{ match.score }}%
+                            </span>
+
+                        </div>
+
+
+                        <div class="admin-actions">
+
+                            <a
+                                href="{{ url_for('update_match', match_id=match.id, action='verified') }}"
+                                class="verify-button"
+                            >
+                                Verify
+                            </a>
+
+                            <a
+                                href="{{ url_for('update_match', match_id=match.id, action='rejected') }}"
+                                class="reject-button"
+                            >
+                                Reject
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                {% else %}
+
+                    <p>
+                        No matches available.
+                    </p>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
